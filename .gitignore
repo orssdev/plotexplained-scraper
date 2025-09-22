@@ -1,4 +1,5 @@
 .DS_Store
 .vscode/
 httpcache/
+__pycache__/
 .env
