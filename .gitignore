@@ -3,3 +3,5 @@
 httpcache/
 __pycache__/
 .env
+*.jl
+*.jsonl

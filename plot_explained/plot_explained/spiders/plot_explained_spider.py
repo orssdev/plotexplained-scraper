@@ -12,6 +12,18 @@ class PlotExplainedSpider(scrapy.Spider):
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
+        
+
     def parse(self, response):
-        link = f'https://www.plotexplained.com{response.css('a[href^="/movie/"]::attr(href)').get()}'
-        print(link)
+        urls = [f'https://www.plotexplained.com{x}' for x in response.css('a[href^="/movie/"]::attr(href)').getall()]
+
+        for url in urls:
+            yield scrapy.Request(url=url, callback=self.movie_parse)
+    
+    def movie_parse(self, responce):
+        title = responce.css('h1::text').get()
+        yield {
+            'url': responce.url,
+            'title': title
+        }
+    
