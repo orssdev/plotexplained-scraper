@@ -7,7 +7,7 @@ class PlotExplainedSpider(scrapy.Spider):
     async def start(self):
         start_year = 2015
         end_year = 2025
-        pages = 2
+        pages = 5
         urls = [f'https://www.plotexplained.com/movie?sort=latest-release&fromYear={start_year}&toYear={end_year}&page={x}' for x in range(1, pages + 1)]
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
@@ -25,6 +25,7 @@ class PlotExplainedSpider(scrapy.Spider):
         info = response.css('div.flex.pt-4.flex-row.font-semibold.text-base.sm\\:text-lg.xl\\:text-xl.font-source-pro.gap-x-8.md\\:gap-x-14.gap-y-2.sm\\:gap-y-3.md\\:gap-y-4.flex-wrap p::text').getall()
         capitalize = response.css('span.capitalize::text').getall()
         desc = response.css('p.text-base.lg\\:text-lg.text-foreground::text').get()
+        title_image = response.css('img.h-full.w-auto.lg\\:w-full.lg\\:h-auto.rounded-lg.shadow-lg.max-h-80.sm\\:max-h-96::attr(src)').get()
         year = 'No year listed'
         runtime = 'No runtime listed'
         language = 'No language listed'
@@ -58,6 +59,7 @@ class PlotExplainedSpider(scrapy.Spider):
             'director' : director,
             'budget' : budget,
             'genre': capitalize[1:],
-            'description': desc
+            'description': desc,
+            'title_image': title_image
         }
     
